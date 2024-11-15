@@ -10,7 +10,7 @@ export function Header() {
         <header className="w-full flex items-center justify-between px-8 py-4 shadow-md">
             <div className="flex items-center space-x-4">
                 <Link href={'/'}>
-                    <Image src={Logo} alt="Huoli Logo" width={100} height={100} />
+                    <Image src={Logo} alt="Huoli Logo" width={100} height={80} />
                 </Link>
                 <h1 className="text-xl font-bold text-gray-800">HUOLI TECH</h1>
             </div>
