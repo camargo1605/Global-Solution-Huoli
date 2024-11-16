@@ -8,11 +8,11 @@ export default function RegistroPage() {
     const navigation = useRouter();
     const fields = [
         { label: "Nome", name: "nome", type: "text", placeholder: "Digite seu nome", required: true },
-        { label: "Email", name: "email", type: "email", placeholder: "Digite seu email", required: true },
-        { label: "CPF", name: "cpf", type: "text", placeholder: "Digite seu CPF", required: true },
+        { label: "Email", name: "email", type: "email", placeholder: "Digite seu email", required: true, pattern: "[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$", title: "Digite um email válido, por exemplo: teste@email.com" },
+        { label: "CPF", name: "cpf", type: "text", placeholder: "Digite seu CPF", required: true, pattern: "[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}", title: "Digite um CPF válido, por exemplo: 123.456.789-09" },
         { label: "Data de Nascimento", name: "dataNascimento", type: "date", required: true },
-        { label: "Telefone", name: "telefone", type: "tel", placeholder: "Digite seu telefone", required: true },
-        { label: "CEP", name: "cep", type: "text", placeholder: "Digite seu CEP", required: true },
+        { label: "Telefone", name: "telefone", type: "tel", placeholder: "Digite seu telefone", required: true, pattern: '^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$', title: 'Digite um telefone válido, por exemplo: (11) 94374-0709 ou 11943740709' },
+        { label: "CEP", name: "cep", type: "text", placeholder: "Digite seu CEP", required: true, pattern: "[0-9]{5}-[0-9]{3}", title: "Digite um CEP válido, por exemplo: 12345-678" },
         { label: "Senha", name: "senha", type: "password", placeholder: "Digite sua senha", required: true },
         { label: "Confirme sua senha", name: "confirmarSenha", type: "password", placeholder: "Confirme sua senha", required: true },
     ];

@@ -21,6 +21,8 @@ export function Form({ fields, onSubmit, buttonText = "Submit" }: FormProps) {
                         id={field.name}
                         placeholder={field.placeholder}
                         required={field.required}
+                        pattern={field.pattern}
+                        title={field.title}
                         className="p-3 border border-gray-300 rounded-md focus:outline-none focus:border-teal-500"
                     />
                 </div>

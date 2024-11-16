@@ -4,6 +4,8 @@ export type FormField = {
     type: string;
     placeholder?: string;
     required?: boolean;
+    pattern?: string;
+    title?: string;
 };
 
 export type Registro = {
@@ -19,4 +21,24 @@ export type Registro = {
 export type Login = {
     email: string;
     senha: string;
+};
+
+export type Eletrodomestico = {
+    id?: number;
+    id_cliente: number;
+    nome: string;
+    marca: string;
+    modelo: string;
+    potencia: number;
+    voltagem: string;
+    dt_registro: string;
+    tempo_uso: number;
+    custo_estimado: number;
+};
+
+
+export type ConfiguracaoConsumo = {
+    id_eletrodomestico: number;
+    limite_consumo: number;
+    acao_apos_limite: string;
 };
