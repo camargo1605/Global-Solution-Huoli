@@ -1,13 +1,15 @@
 import React from 'react';
-import { FormField } from '../types/types';
+import { Eletrodomestico, FormField } from '../types/types';
 
 interface FormProps {
-    fields: FormField[]; 
-    onSubmit: (event: React.FormEvent<HTMLFormElement>) => void; 
-    buttonText?: string; 
+    fields: FormField[];
+    onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+    buttonText?: string;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    values?: Eletrodomestico | Record<string, string>;  
 }
 
-export function Form({ fields, onSubmit, buttonText = "Submit" }: FormProps) {
+export function Form({ fields, onSubmit, buttonText = "Submit", onChange, values }: FormProps) {
     return (
         <form onSubmit={onSubmit} className="bg-white p-8 rounded-lg shadow-lg max-w-lg mx-auto space-y-6">
             {fields.map((field) => (
@@ -21,8 +23,8 @@ export function Form({ fields, onSubmit, buttonText = "Submit" }: FormProps) {
                         id={field.name}
                         placeholder={field.placeholder}
                         required={field.required}
-                        pattern={field.pattern}
-                        title={field.title}
+                        value={values ? (values[field.name as keyof Eletrodomestico] ?? '') : ''}
+                        onChange={onChange}
                         className="p-3 border border-gray-300 rounded-md focus:outline-none focus:border-teal-500"
                     />
                 </div>

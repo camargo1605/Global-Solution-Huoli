@@ -31,7 +31,6 @@ export type Eletrodomestico = {
     modelo: string;
     potencia: number;
     voltagem: string;
-    dt_registro: string;
     tempo_uso: number;
     custo_estimado: number;
 };

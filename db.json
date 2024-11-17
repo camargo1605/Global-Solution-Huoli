@@ -1,0 +1,112 @@
+{
+  "clientes": [
+    {
+      "id": "1",
+      "nome": "João da Silva",
+      "email": "joao.silva@example.com",
+      "cpf": "12345678901",
+      "cep": "12345678",
+      "telefone": "11987654321",
+      "dt_nascimento": "1980-05-20",
+      "senha": "senha123"
+    },
+    {
+      "id": "2",
+      "nome": "Maria Oliveira",
+      "email": "maria.oliveira@example.com",
+      "cpf": "23456789012",
+      "cep": "23456789",
+      "telefone": "11987651234",
+      "dt_nascimento": "1992-11-15",
+      "senha": "senha456"
+    },
+    {
+      "id": "3",
+      "nome": "Carlos Pereira",
+      "email": "carlos.pereira@example.com",
+      "cpf": "34567890123",
+      "cep": "34567890",
+      "telefone": "21987654321",
+      "dt_nascimento": "1985-02-10",
+      "senha": "senha789"
+    },
+    {
+      "id": "4",
+      "nome": "Caio Marques",
+      "email": "caiomarques.cmxs@gmail.com",
+      "senha": "123456",
+      "cpf": "53549782896",
+      "dataNascimento": "2005-07-09",
+      "telefone": "11943740709",
+      "cep": "03356000"
+    },
+    {
+      "id": "4e70",
+      "nome": "Caio Marques",
+      "email": "caiomarques.cmxs@gmail.com",
+      "senha": "1234",
+      "cpf": "53549782896",
+      "dataNascimento": "5200-07-01",
+      "telefone": "11943740709",
+      "cep": "03356000"
+    }
+  ],
+  "eletrodomesticos": [
+    {
+      "id": "1",
+      "nome": "Geladeira",
+      "marca": "Brastemp",
+      "modelo": "Frost Free",
+      "potencia": 150,
+      "voltagem": "110V",
+      "tempo_uso": 200,
+      "custo_estimado": 50,
+      "id_cliente": 1
+    },
+    {
+      "id": "2",
+      "nome": "Microondas",
+      "marca": "LG",
+      "modelo": "Grill",
+      "potencia": 1200,
+      "voltagem": "220V",
+      "tempo_uso": 50,
+      "custo_estimado": 15,
+      "id_cliente": 2
+    },
+    {
+      "id": "7b9e",
+      "dt_registro": "2024-11-16T17:52:38.893Z",
+      "nome": "Notebook",
+      "marca": "Acer",
+      "modelo": "Aspire 5",
+      "potencia": 100,
+      "voltagem": "220",
+      "tempo_uso": 800,
+      "custo_estimado": 123,
+      "id_cliente": 4
+    },
+    {
+      "id": "1ff4",
+      "nome": "",
+      "marca": "",
+      "modelo": "",
+      "potencia": 0,
+      "voltagem": "",
+      "tempo_uso": 0,
+      "custo_estimado": 0,
+      "id_cliente": 0
+    },
+    {
+      "id": "35e3",
+      "nome": "a",
+      "marca": "a",
+      "modelo": "a",
+      "potencia": "1222",
+      "voltagem": "1021",
+      "tempo_uso": "12030",
+      "custo_estimado": 122.51,
+      "id_cliente": "01"
+    }
+  ]
+}
