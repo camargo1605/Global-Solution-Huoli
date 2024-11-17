@@ -6,29 +6,32 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
 export default function EletrodomesticoForm() {
-    const navigator = useRouter();
+    const navigation = useRouter();
     const [formData, setFormData] = useState<Eletrodomestico>({
         nome: "",
         marca: "",
         modelo: "",
         potencia: 0,
         voltagem: "",
-        tempo_uso: 0,
-        custo_estimado: 0,
-        id_cliente: 0,
+        tempoUso: 0,
+        custoEstimado: 0,
     });
 
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+    const [userId, setUserId] = useState<number | null>(null);
 
     // Verificar se o usuário está logado
     useEffect(() => {
         const email = localStorage.getItem("userEmail");
-        if (email) {
+        const idCliente = localStorage.getItem("userId");
+
+        if (email && idCliente) {
             setIsAuthenticated(true);
+            setUserId(parseInt(idCliente, 10));
         } else {
-            navigator.push("/pages/login");
+            navigation.push("/pages/login");
         }
-    }, [navigator]);
+    }, [navigation]);
 
     type FormField = {
         label: string;
@@ -45,23 +48,22 @@ export default function EletrodomesticoForm() {
         { label: "Modelo", name: "modelo", type: "text", placeholder: "Digite o modelo do eletrodoméstico", required: true },
         { label: "Potência (W)", name: "potencia", type: "number", placeholder: "Digite a potência do eletrodoméstico", required: true },
         { label: "Voltagem", name: "voltagem", type: "text", placeholder: "Digite a voltagem do eletrodoméstico", required: true },
-        { label: "Tempo de Uso (minutos)", name: "tempo_uso", type: "number", placeholder: "Digite o tempo de uso do eletrodoméstico", required: true },
-        { label: "Custo Estimado", name: "custo_estimado", type: "number", placeholder: "Custo estimado", readOnly: true },
-        { label: "ID Cliente", name: "id_cliente", type: "number", placeholder: "Digite o ID do cliente", required: true },
+        { label: "Tempo de Uso (minutos)", name: "tempoUso", type: "number", placeholder: "Digite o tempo de uso do eletrodoméstico", required: true },
+        { label: "Custo Estimado", name: "custoEstimado", type: "number", placeholder: "Custo estimado", readOnly: true },
     ];
 
     useEffect(() => {
         const potencia = formData.potencia;
-        const tempo_uso = formData.tempo_uso;
+        const tempoUso = formData.tempoUso;
 
-        if (!isNaN(potencia) && !isNaN(tempo_uso)) {
-            const calculatedCost = calculateEstimatedCost(potencia, tempo_uso);
+        if (!isNaN(potencia) && !isNaN(tempoUso)) {
+            const calculatedCost = calculateEstimatedCost(potencia, tempoUso);
             setFormData((prev) => ({
                 ...prev,
-                custo_estimado: calculatedCost,
+                custoEstimado: calculatedCost,
             }));
         }
-    }, [formData.potencia, formData.tempo_uso]);
+    }, [formData.potencia, formData.tempoUso]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -71,23 +73,34 @@ export default function EletrodomesticoForm() {
         }));
     };
 
-    const calculateEstimatedCost = (potencia: number, tempo_uso: number): number => {
+    const calculateEstimatedCost = (potencia: number, tempoUso: number): number => {
         const tarifa = 0.5;
         const potenciaKW = potencia / 1000; // Convertendo para kW
-        const tempoHoras = tempo_uso / 60; // Convertendo para horas
+        const tempoHoras = tempoUso / 60; // Convertendo para horas
         return parseFloat((potenciaKW * tempoHoras * tarifa).toFixed(2)); // Arredondando para 2 casas decimais
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        if (userId === null) {
+            alert("Usuário não autenticado");
+            return;
+        }
+
         try {
-            const response = await fetch("http://localhost:8080/eletrodomesticos", {
+            // Adicionando o idCliente ao objeto formData antes de enviar
+            const dataToSend: Eletrodomestico = {
+                ...formData,
+                idCliente: userId,
+            };
+            console.log(dataToSend);
+            const response = await fetch("http://localhost:8080/eletrodomestico", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(formData),
+                body: JSON.stringify(dataToSend),
             });
 
             if (!response.ok) {
@@ -95,7 +108,7 @@ export default function EletrodomesticoForm() {
             }
 
             alert("Eletrodoméstico cadastrado com sucesso!");
-            navigator.push("/pages/meus-aparelhos");
+            navigation.push("/pages/meus-aparelhos");
         } catch (error) {
             console.error("Erro ao salvar o eletrodoméstico:", error);
             alert("Erro ao salvar o eletrodoméstico, tente novamente.");

@@ -4,15 +4,13 @@ import Image from "next/image";
 import Logo from "../images/Huoli.png";
 import { LoginBtn } from "./loginBtn";
 import { RegistreBtn } from "./registreBtn";
-import '../app/globals.css';
+import "../app/globals.css";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 
 export function Header() {
     const [menuOpen, setMenuOpen] = useState(false);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const router = useRouter();
 
     // Verificar se o usuário está autenticado
     useEffect(() => {
@@ -21,13 +19,6 @@ export function Header() {
             setIsAuthenticated(true);
         }
     }, []);
-
-    // Função para realizar o logout
-    const handleLogout = () => {
-        localStorage.removeItem("userEmail");
-        setIsAuthenticated(false);
-        router.push("/pages/login"); // Redireciona para a página de login
-    };
 
     return (
         <header className="w-full flex items-center justify-between px-6 py-4 shadow-md bg-white relative">
@@ -48,25 +39,18 @@ export function Header() {
                     <li>
                         <Link href={'/pages/meus-aparelhos'} className="text-gray-700 font-medium hover:text-teal-600 transition duration-300">Consumo</Link>
                     </li>
+                    <li>
+                        <Link href={'/pages/visao-geral'} className="text-gray-700 font-medium hover:text-teal-600 transition duration-300">Visão Geral</Link>
+                    </li>
+                    <li>
+                        <Link href={'/pages/profile'} className="text-gray-700 font-medium hover:text-teal-600 transition duration-300">Meu Perfil</Link>
+                    </li>
                 </ul>
             </nav>
             <div className="hidden md:flex items-center space-x-4">
-                {isAuthenticated ? (
-                    <>
-                        <button
-                            onClick={handleLogout}
-                            className="bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 transition duration-300"
-                        >
-                            Logout
-                        </button>
-                    </>
-                ) : (
-                    <>
-                        <RegistreBtn link="/pages/registro" />
-                        <span className="text-gray-500">ou</span>
-                        <LoginBtn link="/pages/login" />
-                    </>
-                )}
+                <RegistreBtn link="/pages/registro" />
+                <span className="text-gray-500">ou</span>
+                <LoginBtn link="/pages/login" />
             </div>
 
             <div className="md:hidden flex items-center relative">
@@ -95,28 +79,21 @@ export function Header() {
                         <Link href="/" className="text-teal-700 font-semibold hover:underline">
                             Home
                         </Link>
-                        {isAuthenticated ? (
-                            <button
-                                onClick={handleLogout}
-                                className="text-red-600 font-semibold hover:underline"
-                            >
-                                Logout
-                            </button>
-                        ) : (
-                            <>
-                                <Link href="/pages/registro" className="text-teal-700 font-semibold hover:underline">
-                                    Registrar
-                                </Link>
-                                <Link href="/pages/login" className="text-teal-700 font-semibold hover:underline">
-                                    Iniciar sessão
-                                </Link>
-                            </>
-                        )}
                         <Link href="/pages/eletrodomesticos" className="text-teal-700 font-semibold hover:underline">
                             Cadastro Eletrodoméstico
                         </Link>
                         <Link href="/pages/meus-aparelhos" className="text-teal-700 font-semibold hover:underline">
                             Consumo
+                        </Link>
+                        <Link href={'/pages/visao-geral'} className="text-teal-700 font-semibold hover:underline">Visão Geral</Link>
+                        <Link href="/pages/registro" className="text-teal-700 font-semibold hover:underline">
+                            Registrar
+                        </Link>
+                        <Link href="/pages/login" className="text-teal-700 font-semibold hover:underline">
+                            Iniciar sessão
+                        </Link>
+                        <Link href="/pages/profile" className="text-teal-700 font-semibold hover:underline">
+                            Meu Perfil
                         </Link>
                     </div>
                 )}

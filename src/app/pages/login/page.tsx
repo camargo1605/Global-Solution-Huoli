@@ -30,7 +30,7 @@ export default function LoginPage() {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        
+
         try {
             const response = await fetch("http://localhost:5000/login", {
                 method: "POST",
@@ -41,7 +41,9 @@ export default function LoginPage() {
             });
 
             if (response.ok) {
-                localStorage.setItem("userEmail", formData.email);
+                const responseData = await response.json();
+                localStorage.setItem("userEmail", responseData.email);
+                localStorage.setItem("userId", responseData.idCliente);
                 navigation.push("/");
             } else {
                 const errorData = await response.json();

@@ -1,44 +1,41 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
-interface Eletrodomestico {
-    id_eletrodomestico: number;
-    nome: string;
-    marca: string;
-    custo_estimado: number;
-}
+import { useRouter } from "next/navigation";
+import { Eletrodomestico } from "@/types/types";
 
 export default function MeusAparelhosPage() {
     const [eletrodomesticos, setEletrodomesticos] = useState<Eletrodomestico[]>([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const navigation = useRouter();
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
     useEffect(() => {
-        // Obtendo o email do usuário do localStorage
         const email = localStorage.getItem("userEmail");
+        const idCliente = localStorage.getItem("userId");
 
+        if (email && idCliente) {
+            setIsAuthenticated(true);
+        } else {
+            navigation.push("/pages/login");
+        }
+    }, [navigation]);
+
+    useEffect(() => {
+        const email = localStorage.getItem("userEmail");
         if (email) {
-            // Fazendo a requisição para buscar os eletrodomésticos do usuário específico
-            fetch(`http://localhost:5000//find-eletrodomesticos?email=${email}`)
-                .then((response) => {
-                    if (!response.ok) {
-                        throw new Error("Erro ao buscar eletrodomésticos");
-                    }
-                    return response.json();
-                })
+            fetch(`http://localhost:5000/find-eletrodomesticos?email=${email}`)
+                .then((response) => response.json())
                 .then((data) => {
                     setEletrodomesticos(data);
                     setLoading(false);
                 })
                 .catch((error) => {
                     console.error("Erro ao buscar eletrodomésticos:", error);
-                    setError("Não foi possível buscar os eletrodomésticos. Tente novamente mais tarde.");
                     setLoading(false);
                 });
         } else {
             setLoading(false);
-            setError("Usuário não está autenticado.");
         }
     }, []);
 
@@ -46,35 +43,72 @@ export default function MeusAparelhosPage() {
         return <p>Carregando...</p>;
     }
 
-    if (error) {
-        return <p className="text-red-300 font-extrabold text-center min-h-screen mt-10">{error}</p>;
-    }
+    const handleDelete = async (id: number) => {
+        try {
+            const response = await fetch(`http://localhost:8080/eletrodomestico/${id}`, {
+                method: "DELETE",
+            });
+            if (response.ok) {
+                alert("Eletrodoméstico deletado com sucesso!");
+                setEletrodomesticos(eletrodomesticos.filter((eletro) => eletro.idEletrodomestico !== id));
+            } else {
+                alert("Erro ao deletar eletrodoméstico.");
+            }
+        } catch (error) {
+            console.error("Erro ao deletar eletrodoméstico:", error);
+        }
+    };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-teal-700 to-blue-500 px-4">
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-teal-700 to-blue-500 px-4 py-8">
             <div className="w-full max-w-5xl p-8 rounded-lg bg-white shadow-md">
                 <h2 className="text-2xl font-bold mb-6 text-center">Meus Eletrodomésticos</h2>
                 {eletrodomesticos.length > 0 ? (
-                    <table className="w-full table-auto">
-                        <thead>
-                            <tr className="bg-gray-200">
-                                <th className="px-4 py-2">ID</th>
-                                <th className="px-4 py-2">Nome</th>
-                                <th className="px-4 py-2">Marca</th>
-                                <th className="px-4 py-2">Custo Estimado (R$)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {eletrodomesticos.map((eletro) => (
-                                <tr key={eletro.id_eletrodomestico} className="text-center border-b">
-                                    <td className="px-4 py-2">{eletro.id_eletrodomestico}</td>
-                                    <td className="px-4 py-2">{eletro.nome}</td>
-                                    <td className="px-4 py-2">{eletro.marca}</td>
-                                    <td className="px-4 py-2">{eletro.custo_estimado.toFixed(2)}</td>
+                    <div className="overflow-x-auto">
+                        <table className="w-full table-auto">
+                            <thead>
+                                <tr className="bg-gray-100">
+                                    <th className="border px-4 py-2 text-sm md:text-base">ID</th>
+                                    <th className="border px-4 py-2 text-sm md:text-base">Nome</th>
+                                    <th className="border px-4 py-2 text-sm md:text-base">Marca</th>
+                                    <th className="border px-4 py-2 text-sm md:text-base">Custo Estimado</th>
+                                    <th className="border px-4 py-2 text-sm md:text-base">Ações</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {eletrodomesticos.map((eletro) => (
+                                    <tr key={eletro.idEletrodomestico} className="hover:bg-gray-50">
+                                        <td className="border px-4 py-2 text-center text-sm md:text-base">{eletro.idEletrodomestico}</td>
+                                        <td className="border px-4 py-2 text-center text-sm md:text-base">{eletro.nome}</td>
+                                        <td className="border px-4 py-2 text-center text-sm md:text-base">{eletro.marca}</td>
+                                        <td className="border px-4 py-2 text-center text-sm md:text-base">
+                                            R$ {eletro.custoEstimado !== undefined ? eletro.custoEstimado.toFixed(2) : "N/A"}
+                                        </td>
+                                        <td className="border px-4 py-2 space-x-2 flex justify-center">
+                                            <button
+                                                onClick={() => navigation.push(`/meus-aparelhos/${eletro.idEletrodomestico}/alterar`)}
+                                                className="bg-yellow-500 text-white px-3 py-1 rounded text-sm md:text-base hover:bg-yellow-600"
+                                            >
+                                                Alterar
+                                            </button>
+                                            <button
+                                                onClick={() => eletro.idEletrodomestico !== undefined && handleDelete(eletro.idEletrodomestico)}
+                                                className="bg-red-500 text-white px-3 py-1 rounded text-sm md:text-base hover:bg-red-600"
+                                            >
+                                                Deletar
+                                            </button>
+                                            <button
+                                                onClick={() => navigation.push(`/meus-aparelhos/${eletro.idEletrodomestico}/configuracoes`)}
+                                                className="bg-blue-500 text-white px-3 py-1 rounded text-sm md:text-base hover:bg-blue-600"
+                                            >
+                                                Configurar
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 ) : (
                     <p className="text-center text-gray-600">Nenhum eletrodoméstico cadastrado.</p>
                 )}

@@ -24,20 +24,20 @@ export type Login = {
 };
 
 export type Eletrodomestico = {
-    id?: number;
-    id_cliente: number;
+    idEletrodomestico?: number;
+    idCliente?: number;
     nome: string;
     marca: string;
     modelo: string;
     potencia: number;
     voltagem: string;
-    tempo_uso: number;
-    custo_estimado: number;
+    tempoUso: number;
+    custoEstimado: number;
 };
 
 
 export type ConfiguracaoConsumo = {
-    id_eletrodomestico: number;
-    limite_consumo: number;
-    acao_apos_limite: string;
+    idEletrodomestico: number;
+    limiteConsumo: number;
+    acaoAposLimite: string;
 };
