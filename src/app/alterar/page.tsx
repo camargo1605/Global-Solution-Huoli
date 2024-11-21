@@ -1,16 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { Eletrodomestico } from "@/types/types";
-import { Form } from "@/components/form";
+import { useRouter, useParams } from "next/navigation";
+import { useEffect, useState, Suspense } from "react";
 
 export default function AlterarEletrodomesticoPage() {
     const router = useRouter();
-    const searchParams = useSearchParams();
-    const id = searchParams.get("id");
+    const params = useParams();
+    const idEletrodomestico = params?.id;
 
-    const [formData, setFormData] = useState<Eletrodomestico>({
+    const [formData, setFormData] = useState({
         nome: "",
         marca: "",
         modelo: "",
@@ -18,7 +16,6 @@ export default function AlterarEletrodomesticoPage() {
         voltagem: "",
         tempoUso: 0,
         custoEstimado: 0,
-        idCliente: 0,
     });
 
     const [loading, setLoading] = useState(true);
@@ -26,44 +23,29 @@ export default function AlterarEletrodomesticoPage() {
 
     useEffect(() => {
         const email = localStorage.getItem("userEmail");
-        const idCliente = localStorage.getItem("userId");
 
-        if (!email || !idCliente) {
+        if (!email) {
             router.push("/login");
-            return;
-        }
-
-        setIsAuthenticated(true);
-
-        // Carregar os dados do eletrodoméstico usando o ID fornecido
-        if (id) {
-            fetch(`http://localhost:8080/eletrodomestico/${id}`) 
-                .then((response) => response.json())
-                .then((data) => {
-                    setFormData({ ...data, idCliente: parseInt(idCliente, 10) });
-                    setLoading(false);
-                })
-                .catch((error) => {
-                    console.error("Erro ao buscar eletrodoméstico:", error);
-                    setLoading(false);
-                });
         } else {
-            setLoading(false);
-        }
-    }, [id, router]);
+            setIsAuthenticated(true);
 
-    useEffect(() => {
-        const potencia = formData.potencia;
-        const tempoUso = formData.tempoUso;
-
-        if (!isNaN(potencia) && !isNaN(tempoUso)) {
-            const calculatedCost = calculateEstimatedCost(potencia, tempoUso);
-            setFormData((prev) => ({
-                ...prev,
-                custoEstimado: calculatedCost,
-            }));
+            // Carregar os dados do eletrodoméstico usando o ID fornecido
+            if (idEletrodomestico) {
+                fetch(`http://localhost:8080/eletrodomestico/${idEletrodomestico}`)
+                    .then((response) => response.json())
+                    .then((data) => {
+                        setFormData(data);
+                        setLoading(false);
+                    })
+                    .catch((error) => {
+                        console.error("Erro ao buscar eletrodoméstico:", error);
+                        setLoading(false);
+                    });
+            } else {
+                setLoading(false);
+            }
         }
-    }, [formData.potencia, formData.tempoUso]);
+    }, [idEletrodomestico, router]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -73,19 +55,11 @@ export default function AlterarEletrodomesticoPage() {
         }));
     };
 
-    const calculateEstimatedCost = (potencia: number, tempoUso: number): number => {
-        const tarifa = 0.5; // Valor da tarifa por kWh
-        const potenciaKW = potencia / 1000; // Convertendo para kW
-        const tempoHoras = tempoUso / 60; // Convertendo para horas
-        return parseFloat((potenciaKW * tempoHoras * tarifa).toFixed(2)); // Arredondando para 2 casas decimais
-    };
-
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log("Form data:", formData);
 
         try {
-            const response = await fetch(`http://localhost:8080/eletrodomestico/${id}`, {
+            const response = await fetch(`http://localhost:8080/eletrodomestico/${idEletrodomestico}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -113,22 +87,72 @@ export default function AlterarEletrodomesticoPage() {
         return null;
     }
 
-    const formFields = [
-        { label: "Nome", name: "nome", type: "text", placeholder: "Digite o nome do eletrodoméstico", required: true },
-        { label: "Marca", name: "marca", type: "text", placeholder: "Digite a marca do eletrodoméstico", required: true },
-        { label: "Modelo", name: "modelo", type: "text", placeholder: "Digite o modelo do eletrodoméstico", required: true },
-        { label: "Potência (W)", name: "potencia", type: "number", placeholder: "Digite a potência do eletrodoméstico", required: true },
-        { label: "Voltagem", name: "voltagem", type: "text", placeholder: "Digite a voltagem do eletrodoméstico", required: true },
-        { label: "Tempo de Uso (minutos)", name: "tempoUso", type: "number", placeholder: "Digite o tempo de uso do eletrodoméstico", required: true },
-        { label: "Custo Estimado", name: "custoEstimado", type: "number", placeholder: "Custo estimado", readOnly: true },
-    ];
-
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-teal-700 to-blue-500 px-4">
-            <div className="w-full max-w-lg p-8 rounded-lg">
-                <h2 className="text-2xl font-bold mb-6 text-center text-white">Alterar Eletrodoméstico</h2>
-                <Form fields={formFields} onSubmit={handleSubmit} onChange={handleChange} values={formData} buttonText="Salvar Alterações" />
+        <Suspense fallback={<p>Carregando...</p>}>
+            <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-teal-700 to-blue-500 px-4">
+                <div className="w-full max-w-lg p-8 rounded-lg bg-white shadow-md">
+                    <h2 className="text-2xl font-bold mb-6 text-center">Alterar Eletrodoméstico</h2>
+                    <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
+                        <input
+                            type="text"
+                            name="nome"
+                            value={formData.nome}
+                            onChange={handleChange}
+                            placeholder="Nome"
+                            className="p-2 border rounded"
+                            required
+                        />
+                        <input
+                            type="text"
+                            name="marca"
+                            value={formData.marca}
+                            onChange={handleChange}
+                            placeholder="Marca"
+                            className="p-2 border rounded"
+                            required
+                        />
+                        <input
+                            type="text"
+                            name="modelo"
+                            value={formData.modelo}
+                            onChange={handleChange}
+                            placeholder="Modelo"
+                            className="p-2 border rounded"
+                            required
+                        />
+                        <input
+                            type="number"
+                            name="potencia"
+                            value={formData.potencia}
+                            onChange={handleChange}
+                            placeholder="Potência (W)"
+                            className="p-2 border rounded"
+                            required
+                        />
+                        <input
+                            type="text"
+                            name="voltagem"
+                            value={formData.voltagem}
+                            onChange={handleChange}
+                            placeholder="Voltagem"
+                            className="p-2 border rounded"
+                            required
+                        />
+                        <input
+                            type="number"
+                            name="tempoUso"
+                            value={formData.tempoUso}
+                            onChange={handleChange}
+                            placeholder="Tempo de Uso (minutos)"
+                            className="p-2 border rounded"
+                            required
+                        />
+                        <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
+                            Salvar Alterações
+                        </button>
+                    </form>
+                </div>
             </div>
-        </div>
+        </Suspense>
     );
 }
