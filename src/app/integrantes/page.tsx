@@ -1,7 +1,7 @@
 import Image from "next/image";
-import CaioM from "../../../images/CaioM.jpeg";
-import Caioaio from "../../../images/Caioaio.jpeg";
-import Felipe from "../../../images/Felipe.jpeg";
+import CaioM from "../../images/CaioM.jpeg";
+import Caioaio from "../../images/Caioaio.jpeg";
+import Felipe from "../../images/Felipe.jpeg";
 
 const Integrantes = () => {
     return (

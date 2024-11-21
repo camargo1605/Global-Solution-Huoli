@@ -37,6 +37,7 @@ export type Eletrodomestico = {
 
 
 export type ConfiguracaoConsumo = {
+    idConfiguracao?: number;
     idEletrodomestico: number;
     limiteConsumo: number;
     acaoAposLimite: string;

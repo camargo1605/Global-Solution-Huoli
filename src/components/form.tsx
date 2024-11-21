@@ -1,12 +1,12 @@
 import React from 'react';
-import { Eletrodomestico, FormField } from '../types/types';
+import { ConfiguracaoConsumo, Eletrodomestico, FormField } from '../types/types';
 
 interface FormProps {
     fields: FormField[];
     onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
     buttonText?: string;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    values?: Eletrodomestico | Record<string, string>;  
+    values?: Eletrodomestico | Record<string, string> | ConfiguracaoConsumo;  
 }
 
 export function Form({ fields, onSubmit, buttonText = "Submit", onChange, values }: FormProps) {
@@ -23,7 +23,7 @@ export function Form({ fields, onSubmit, buttonText = "Submit", onChange, values
                         id={field.name}
                         placeholder={field.placeholder}
                         required={field.required}
-                        value={values ? (values[field.name as keyof Eletrodomestico] ?? '') : ''}
+                        value={values ? (values as any)[field.name] ?? '' : ''}
                         onChange={onChange}
                         className="p-3 border border-gray-300 rounded-md focus:outline-none focus:border-teal-500"
                     />

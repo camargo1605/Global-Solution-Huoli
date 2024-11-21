@@ -34,23 +34,23 @@ export function Header() {
                         <Link href={'/'} className="text-gray-700 font-medium hover:text-teal-600 transition duration-300">Home</Link>
                     </li>
                     <li>
-                        <Link href={'/pages/eletrodomesticos'} className="text-gray-700 font-medium hover:text-teal-600 transition duration-300">Cadastro Eletrodoméstico</Link>
+                        <Link href={'/eletrodomesticos'} className="text-gray-700 font-medium hover:text-teal-600 transition duration-300">Cadastro Eletrodoméstico</Link>
                     </li>
                     <li>
-                        <Link href={'/pages/meus-aparelhos'} className="text-gray-700 font-medium hover:text-teal-600 transition duration-300">Consumo</Link>
+                        <Link href={'/meus-aparelhos'} className="text-gray-700 font-medium hover:text-teal-600 transition duration-300">Consumo</Link>
                     </li>
                     <li>
-                        <Link href={'/pages/visao-geral'} className="text-gray-700 font-medium hover:text-teal-600 transition duration-300">Visão Geral</Link>
+                        <Link href={'/visao-geral'} className="text-gray-700 font-medium hover:text-teal-600 transition duration-300">Visão Geral</Link>
                     </li>
                     <li>
-                        <Link href={'/pages/profile'} className="text-gray-700 font-medium hover:text-teal-600 transition duration-300">Meu Perfil</Link>
+                        <Link href={'/profile'} className="text-gray-700 font-medium hover:text-teal-600 transition duration-300">Meu Perfil</Link>
                     </li>
                 </ul>
             </nav>
             <div className="hidden md:flex items-center space-x-4">
-                <RegistreBtn link="/pages/registro" />
+                <RegistreBtn link="/registro" />
                 <span className="text-gray-500">ou</span>
-                <LoginBtn link="/pages/login" />
+                <LoginBtn link="/login" />
             </div>
 
             <div className="md:hidden flex items-center relative">
@@ -79,20 +79,20 @@ export function Header() {
                         <Link href="/" className="text-teal-700 font-semibold hover:underline">
                             Home
                         </Link>
-                        <Link href="/pages/eletrodomesticos" className="text-teal-700 font-semibold hover:underline">
+                        <Link href="/eletrodomesticos" className="text-teal-700 font-semibold hover:underline">
                             Cadastro Eletrodoméstico
                         </Link>
-                        <Link href="/pages/meus-aparelhos" className="text-teal-700 font-semibold hover:underline">
+                        <Link href="/meus-aparelhos" className="text-teal-700 font-semibold hover:underline">
                             Consumo
                         </Link>
-                        <Link href={'/pages/visao-geral'} className="text-teal-700 font-semibold hover:underline">Visão Geral</Link>
-                        <Link href="/pages/registro" className="text-teal-700 font-semibold hover:underline">
+                        <Link href={'/visao-geral'} className="text-teal-700 font-semibold hover:underline">Visão Geral</Link>
+                        <Link href="/registro" className="text-teal-700 font-semibold hover:underline">
                             Registrar
                         </Link>
-                        <Link href="/pages/login" className="text-teal-700 font-semibold hover:underline">
+                        <Link href="/login" className="text-teal-700 font-semibold hover:underline">
                             Iniciar sessão
                         </Link>
-                        <Link href="/pages/profile" className="text-teal-700 font-semibold hover:underline">
+                        <Link href="/profile" className="text-teal-700 font-semibold hover:underline">
                             Meu Perfil
                         </Link>
                     </div>

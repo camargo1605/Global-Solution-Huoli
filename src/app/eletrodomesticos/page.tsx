@@ -29,7 +29,7 @@ export default function EletrodomesticoForm() {
             setIsAuthenticated(true);
             setUserId(parseInt(idCliente, 10));
         } else {
-            navigation.push("/pages/login");
+            navigation.push("/login");
         }
     }, [navigation]);
 
@@ -108,7 +108,7 @@ export default function EletrodomesticoForm() {
             }
 
             alert("Eletrodoméstico cadastrado com sucesso!");
-            navigation.push("/pages/meus-aparelhos");
+            navigation.push("/meus-aparelhos");
         } catch (error) {
             console.error("Erro ao salvar o eletrodoméstico:", error);
             alert("Erro ao salvar o eletrodoméstico, tente novamente.");

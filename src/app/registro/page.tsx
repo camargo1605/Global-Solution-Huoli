@@ -66,7 +66,7 @@ export default function RegistroPage() {
             }
 
             alert("Registro realizado com sucesso!");
-            navigation.push('/pages/login');
+            navigation.push('/login');
         } catch (error) {
             console.error("Erro ao registrar cliente:", error);
         }

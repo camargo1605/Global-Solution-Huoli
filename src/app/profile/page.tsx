@@ -14,7 +14,7 @@ export default function MeuPerfilPage() {
     useEffect(() => {
         const email = localStorage.getItem("userEmail");
         if (!email) {
-            navigation.push("/pages/login");
+            navigation.push("/login");
             return;
         }
 
@@ -81,7 +81,7 @@ export default function MeuPerfilPage() {
                 if (response.ok) {
                     alert("Conta deletada com sucesso.");
                     localStorage.removeItem("userEmail");
-                    navigation.push("/pages/login");
+                    navigation.push("/login");
                 } else {
                     alert("Erro ao deletar a conta.");
                 }
@@ -94,7 +94,7 @@ export default function MeuPerfilPage() {
 
     const handleLogout = () => {
         localStorage.removeItem("userEmail");
-        navigation.push("/pages/login");
+        navigation.push("/login");
     };
 
     if (isLoading) {
