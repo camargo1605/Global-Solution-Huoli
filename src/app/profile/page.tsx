@@ -96,9 +96,8 @@ export default function MeuPerfilPage() {
         localStorage.removeItem("userEmail");
         navigation.push("/login");
     };
-
     if (isLoading) {
-        return <p>Carregando...</p>;
+        return <p className="min-h-screen text-center mt-8">Carregando...</p>;
     }
 
     if (!formData) {

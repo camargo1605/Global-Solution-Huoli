@@ -10,9 +10,8 @@ import { useState, useEffect } from "react";
 
 export function Header() {
     const [menuOpen, setMenuOpen] = useState(false);
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [, setIsAuthenticated] = useState(false);
 
-    // Verificar se o usuário está autenticado
     useEffect(() => {
         const email = localStorage.getItem("userEmail");
         if (email) {
@@ -38,9 +37,6 @@ export function Header() {
                     </li>
                     <li>
                         <Link href={'/meus-aparelhos'} className="text-gray-700 font-medium hover:text-teal-600 transition duration-300">Consumo</Link>
-                    </li>
-                    <li>
-                        <Link href={'/visao-geral'} className="text-gray-700 font-medium hover:text-teal-600 transition duration-300">Visão Geral</Link>
                     </li>
                     <li>
                         <Link href={'/profile'} className="text-gray-700 font-medium hover:text-teal-600 transition duration-300">Meu Perfil</Link>
@@ -85,7 +81,6 @@ export function Header() {
                         <Link href="/meus-aparelhos" className="text-teal-700 font-semibold hover:underline">
                             Consumo
                         </Link>
-                        <Link href={'/visao-geral'} className="text-teal-700 font-semibold hover:underline">Visão Geral</Link>
                         <Link href="/registro" className="text-teal-700 font-semibold hover:underline">
                             Registrar
                         </Link>

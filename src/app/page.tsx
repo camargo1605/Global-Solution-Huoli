@@ -13,7 +13,7 @@ export default function Home() {
           <p className="text-lg text-white mb-6">
             Nossa plataforma ajuda você a entender e otimizar o consumo de energia em sua casa. Faça o seu consumo trabalhar a favor do seu bolso e do planeta!
           </p>
-          <Link href={'/pages/registro'} className="bg-white text-teal-700 font-semibold py-3 px-6 rounded-md hover:bg-gray-200 transition duration-300 inline-block">
+          <Link href={'/registro'} className="bg-white text-teal-700 font-semibold py-3 px-6 rounded-md hover:bg-gray-200 transition duration-300 inline-block">
             COMEÇE AGORA
           </Link>
         </div>

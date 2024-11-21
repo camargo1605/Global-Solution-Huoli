@@ -6,7 +6,7 @@ interface FormProps {
     onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
     buttonText?: string;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    values?: Eletrodomestico | Record<string, string> | ConfiguracaoConsumo;  
+    values?: any;  
 }
 
 export function Form({ fields, onSubmit, buttonText = "Submit", onChange, values }: FormProps) {

@@ -8,7 +8,7 @@ export default function MeusAparelhosPage() {
     const [eletrodomesticos, setEletrodomesticos] = useState<Eletrodomestico[]>([]);
     const [loading, setLoading] = useState(true);
     const navigation = useRouter();
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+    const [, setIsAuthenticated] = useState<boolean>(false);
 
     useEffect(() => {
         const email = localStorage.getItem("userEmail");
@@ -40,7 +40,7 @@ export default function MeusAparelhosPage() {
     }, []);
 
     if (loading) {
-        return <p>Carregando...</p>;
+        return <p className="min-h-screen text-center mt-8">Carregando...</p>;
     }
 
     const handleDelete = async (id: number) => {
@@ -59,30 +59,6 @@ export default function MeusAparelhosPage() {
         }
     };
 
-    const handleConfigure = async (idEletrodomestico: number) => {
-        try {
-            // Faz uma requisição para verificar se já existe uma configuração
-            const response = await fetch(`http://localhost:8080/configuracaoConsumo/${idEletrodomestico}`);
-            
-            if (response.ok) {
-                const configuracao = await response.json();
-                
-                if (configuracao) {
-                    // Se houver configuração, redirecionar para a página de alteração
-                    navigation.push(`/alterar-configuracao?id=${idEletrodomestico}`);
-                } else {
-                    // Se não houver configuração, redirecionar para a página de criação
-                    navigation.push(`/nova-configuracao?id=${idEletrodomestico}`);
-                }
-            } else {
-                throw new Error("Erro ao verificar a configuração de consumo.");
-            }
-        } catch (error) {
-            console.error("Erro ao verificar a configuração de consumo:", error);
-            alert("Erro ao verificar a configuração. Tente novamente.");
-        }
-    };
-
     return (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-teal-700 to-blue-500 px-4 py-8">
             <div className="w-full max-w-5xl p-8 rounded-lg bg-white shadow-md">
@@ -95,7 +71,7 @@ export default function MeusAparelhosPage() {
                                     <th className="border px-4 py-2 text-sm md:text-base">ID</th>
                                     <th className="border px-4 py-2 text-sm md:text-base">Nome</th>
                                     <th className="border px-4 py-2 text-sm md:text-base">Marca</th>
-                                    <th className="border px-4 py-2 text-sm md:text-base">Custo Estimado</th>
+                                    <th className="border px-4 py-2 text-sm md:text-base">Custo Estimado (Diário)</th>
                                     <th className="border px-4 py-2 text-sm md:text-base">Ações</th>
                                 </tr>
                             </thead>
@@ -110,7 +86,7 @@ export default function MeusAparelhosPage() {
                                         </td>
                                         <td className="border px-4 py-2 space-x-2 flex justify-center">
                                             <button
-                                                onClick={() => navigation.push(`/meus-aparelhos/alterar?id=${eletro.idEletrodomestico}`)}
+                                                onClick={() => navigation.push(`/meus-aparelhos/${eletro.idEletrodomestico}/alterar`)}
                                                 className="bg-yellow-500 text-white px-3 py-1 rounded text-sm md:text-base hover:bg-yellow-600"
                                             >
                                                 Alterar
@@ -122,7 +98,7 @@ export default function MeusAparelhosPage() {
                                                 Deletar
                                             </button>
                                             <button
-                                                onClick={() => eletro.idEletrodomestico !== undefined && handleConfigure(eletro.idEletrodomestico)}
+                                                onClick={() => navigation.push(`/meus-aparelhos/${eletro.idEletrodomestico}/configuracoes`)}
                                                 className="bg-blue-500 text-white px-3 py-1 rounded text-sm md:text-base hover:bg-blue-600"
                                             >
                                                 Configurar

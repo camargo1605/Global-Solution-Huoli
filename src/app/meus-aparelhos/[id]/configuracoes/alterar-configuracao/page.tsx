@@ -1,20 +1,21 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useRouter, useParams } from "next/navigation";
 import { Form } from "@/components/form";
 import { ConfiguracaoConsumo } from "@/types/types";
 
 export default function AlterarConfiguracaoPage() {
     const router = useRouter();
-    const searchParams = useSearchParams();
-    const idEletrodomestico = searchParams.get("id");
+    const params = useParams();
+    const id = params?.id;
 
     const [formData, setFormData] = useState<ConfiguracaoConsumo>({
-        idEletrodomestico: parseInt(idEletrodomestico ?? "0", 10),
+        idEletrodomestico: 0,
         limiteConsumo: 0,
         acaoAposLimite: "",
     });
+
     const [loading, setLoading] = useState(true);
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
@@ -22,16 +23,21 @@ export default function AlterarConfiguracaoPage() {
         const email = localStorage.getItem("userEmail");
 
         if (!email) {
-            router.push("/login");
+            router.push("/pages/login");
             return;
         }
 
         setIsAuthenticated(true);
 
         // Carregar os dados da configuração usando o ID fornecido
-        if (idEletrodomestico) {
-            fetch(`http://localhost:8080/configuracao-consumo/${idEletrodomestico}`)
-                .then((response) => response.json())
+        if (id) {
+            fetch(`http://localhost:8080/configuracaoConsumo/${id}`)
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error("Erro ao buscar configuração de consumo");
+                    }
+                    return response.json();
+                })
                 .then((data) => {
                     setFormData(data);
                     setLoading(false);
@@ -43,14 +49,9 @@ export default function AlterarConfiguracaoPage() {
         } else {
             setLoading(false);
         }
-    }, [idEletrodomestico, router]);
+    }, [id, router]);
 
-    const formFields = [
-        { label: "Limite de Consumo (minutos ou watts)", name: "limiteConsumo", type: "number", placeholder: "Digite o limite de consumo", required: true },
-        { label: "Ação após Limite", name: "acaoAposLimite", type: "text", placeholder: "Digite a ação a ser tomada (ex: alertar, desligar)", required: true },
-    ];
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData((prev) => ({
             ...prev,
@@ -60,9 +61,10 @@ export default function AlterarConfiguracaoPage() {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        console.log("Form data:", formData);
 
         try {
-            const response = await fetch(`http://localhost:8080/configuracao-consumo/${idEletrodomestico}`, {
+            const response = await fetch(`http://localhost:8080/configuracaoConsumo/${id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -75,7 +77,7 @@ export default function AlterarConfiguracaoPage() {
             }
 
             alert("Configuração de consumo atualizada com sucesso!");
-            router.push("/meus-aparelhos");
+            router.push(`/meus-aparelhos/${formData.idEletrodomestico}/menu-configuracao`);
         } catch (error) {
             console.error("Erro ao atualizar a configuração de consumo:", error);
             alert("Erro ao atualizar a configuração. Por favor, tente novamente.");
@@ -89,6 +91,11 @@ export default function AlterarConfiguracaoPage() {
     if (!isAuthenticated) {
         return null;
     }
+
+    const formFields = [
+        { label: "Limite de Consumo", name: "limiteConsumo", type: "number", placeholder: "Digite o limite de consumo", required: true },
+        { label: "Ação Após o Limite", name: "acaoAposLimite", type: "text", placeholder: "Digite a ação após o limite (ex: desligar, alertar)", required: true },
+    ];
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-teal-700 to-blue-500 px-4">
